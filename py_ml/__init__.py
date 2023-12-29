@@ -1,1 +1,1 @@
-from .wrapper import teste
+from .wrapper import anuncio, vendedor
