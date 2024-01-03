@@ -288,3 +288,6 @@ class vendedor(auth):
         else:
             return {}
         
+    def refresh_token(self, client_id, client_secret, refresh_token):
+        return super().refresh_token(client_id, client_secret, refresh_token)
+        
