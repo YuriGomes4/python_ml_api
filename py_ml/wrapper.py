@@ -7,10 +7,11 @@ class auth():
         self.access_token = access_token
         self.base_url = "https://api.mercadolibre.com"
 
-    def request(self, method="GET", url="", headers=None, params=None):
+    def request(self, method="GET", url="", headers=None, params=None, data=None):
 
         req_params = params if params != None else {}
         req_headers = headers if headers != None else {}
+        req_data = data if data != None else {}
 
         while True:
 
@@ -26,7 +27,7 @@ class auth():
                 case "HEAD":
                     response = requests.head(url=url, params=req_params, headers=req_headers)
                 case "OPTIONS":
-                    response = requests.options(url=url, params=req_params, headers=req_headers)
+                    response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data)
 
             if response.status_code == 200:
                 return response
@@ -35,6 +36,55 @@ class auth():
                 break
             else:
                 sleep(5)
+
+    def refresh_token(self, client_id, client_secret, refresh_token):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return None
+        
+        seller_id = self.access_token.split('-')[-1]
+        print(seller_id)
+
+        url = self.base_url+f"/users/{seller_id}/items/search"
+
+        params = {
+            'access_token': self.access_token,
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            headers = {
+                'accept': 'application/json',
+                'content-type': 'application/x-www-form-urlencoded',
+            }
+
+            data = {
+                'grant_type': 'refresh_token',
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'refresh_token': refresh_token,
+            }
+
+            #response = requests.post(f'{self.base_url}/oauth/token', headers=headers, data=data)
+
+            response = self.request("POST", url=f'{self.base_url}/oauth/token', headers=headers, data=data)
+
+            if response:
+                return response
+            else:
+                return None
+            
+        else:
+            return None
 
 class anuncio(auth):
 
