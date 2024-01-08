@@ -61,6 +61,8 @@ class auth():
         response = self.request("GET", url=url, params=params)
 
         if response:
+            return None
+        else:
 
             headers = {
                 'accept': 'application/json',
@@ -82,9 +84,6 @@ class auth():
                 return response
             else:
                 return None
-            
-        else:
-            return None
 
 class anuncio(auth):
 
