@@ -17,15 +17,15 @@ class auth():
 
             match method:
                 case "GET":
-                    response = requests.get(url=url, params=req_params, headers=req_headers)
+                    response = requests.get(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "PUT":
-                    response = requests.put(url=url, params=req_params, headers=req_headers)
+                    response = requests.put(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "POST":
-                    response = requests.post(url=url, params=req_params, headers=req_headers)
+                    response = requests.post(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "DELETE":
-                    response = requests.delete(url=url, params=req_params, headers=req_headers)
+                    response = requests.delete(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "HEAD":
-                    response = requests.head(url=url, params=req_params, headers=req_headers)
+                    response = requests.head(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "OPTIONS":
                     response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data)
 
