@@ -37,8 +37,8 @@ Mensagem: {response.json()['message']}
 URL: {url}
 Metodo: {method}
 Parametros: {req_params}
-Headers: {req_params}
-Data: {req_params}
+Headers: {req_headers}
+Data: {req_data}
 JSON: {response.json()}""")
                 break
             else:
@@ -256,7 +256,11 @@ class anuncio(auth):
 
             anuncio['sale_fee'] = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])['sale_fee_amount']
             if anuncio['shipping']['free_shipping'] == 1:
-                anuncio['shipping_free_cost'] = self.opcoes_entrega(mlb, '04913000')['options'][0]['list_cost']
+                opcoes = self.opcoes_entrega(mlb, '04913000')
+                if opcoes != {}:
+                    anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                else:
+                    anuncio['shipping_free_cost'] = 0
             else:
                 anuncio['shipping_free_cost'] = 0
 
