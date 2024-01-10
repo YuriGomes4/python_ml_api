@@ -32,7 +32,14 @@ class auth():
             if response.status_code == 200:
                 return response
             elif response.status_code != 429:
-                print(response.json())
+                print(f"""Erro no retorno da API do Mercado Livre
+Mensagem: {response.json()['message']}
+URL: {url}
+Metodo: {method}
+Parametros: {req_params}
+Headers: {req_params}
+Data: {req_params}
+JSON: {response.json()}""")
                 break
             else:
                 sleep(5)
