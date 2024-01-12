@@ -1,1 +1,1 @@
-from .wrapper import anuncio, vendedor
+from .wrapper import anuncio, vendedor, venda

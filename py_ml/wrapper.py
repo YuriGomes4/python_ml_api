@@ -301,3 +301,87 @@ class vendedor(auth):
     def refresh_token(self, client_id, client_secret, refresh_token):
         return super().refresh_token(client_id, client_secret, refresh_token)
         
+class venda(auth):
+
+    def unica(self, id_venda):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/orders/{id_venda}"
+
+        params = {
+            'access_token': self.access_token,
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
+        
+
+    def info_envio(self, id_venda):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/orders/{id_venda}/shipments"
+
+        params = {
+            'access_token': self.access_token,
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
+        
+
+    def info_faturamento(self, id_venda):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/orders/{id_venda}/billing_info"
+
+        params = {
+            'access_token': self.access_token,
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
