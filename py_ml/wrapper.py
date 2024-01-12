@@ -451,7 +451,10 @@ class venda(auth):
 
         if item != {}:
 
-            item['shipping'] = self.info_envio(id_venda)
+            info_envio = self.info_envio(id_venda)
+
+            if info_envio != {}:
+                item['shipping'] = info_envio
 
             return item
         
