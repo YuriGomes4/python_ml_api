@@ -303,6 +303,55 @@ class vendedor(auth):
         
 class venda(auth):
 
+    def todas(self, seller_id):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return []
+
+        url = self.base_url+f"/orders/search"
+
+        params = {
+            'access_token': self.access_token,
+            'seller': seller_id,
+            'q': "",
+            'offset': 0
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            items = []
+
+            for item in response.json()['results']:
+                items.append(item)
+
+            total = int(response.json()["paging"]["total"])
+            limit = int(response.json()["paging"]["limit"])
+
+            if total > limit:
+
+                while total > len(items):
+
+                    params['offset'] += limit
+
+                    response2 = requests.get(url, params=params)
+
+                    for item in response2.json()['results']:
+                        items.append(item)
+
+            return items
+        
+        else:
+            return []
+
     def unica(self, id_venda):
         """
         Descrição da função
@@ -329,7 +378,6 @@ class venda(auth):
         
         else:
             return {}
-        
 
     def info_envio(self, id_venda):
         """
@@ -356,8 +404,7 @@ class venda(auth):
             return response.json()
         
         else:
-            return {}
-        
+            return {}  
 
     def info_faturamento(self, id_venda):
         """
@@ -382,6 +429,31 @@ class venda(auth):
         if response:
 
             return response.json()
+        
+        else:
+            return {}
+        
+    def unica_extra(self, id_venda):
+        """
+        Pega todas as informações da venda e também acrescenta informações do envio.
+
+        As informações de envio estão dentro de 'shipping'
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        item = self.unica(id_venda)
+
+        if item != {}:
+
+            item['shipping'] = self.info_envio(id_venda)
+
+            return item
         
         else:
             return {}
