@@ -94,180 +94,209 @@ JSON: {response.json()}""")
 
 class anuncio(auth):
 
-    def todos(self, seller_id):
-        """
-        Descrição da função
-        """
-        #Descrição da função
+    class get:
 
-        asct = True #Acesso Só Com Token
+        def todos(self, seller_id):
+            """
+            Descrição da função
+            """
+            #Descrição da função
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
-            print("Token inválido")
-            return []
+            asct = True #Acesso Só Com Token
 
-        url = self.base_url+f"/users/{seller_id}/items/search"
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return []
 
-        params = {
-            'access_token': self.access_token,
-            'offset': 0
-        }
+            url = self.base_url+f"/users/{seller_id}/items/search"
 
-        response = self.request("GET", url=url, params=params)
+            params = {
+                'access_token': self.access_token,
+                'offset': 0
+            }
 
-        if response:
+            response = self.request("GET", url=url, params=params)
 
-            prods = []
+            if response:
 
-            for prod in response.json()['results']:
-                prods.append(prod)
+                prods = []
 
-            total = int(response.json()["paging"]["total"])
-            limit = int(response.json()["paging"]["limit"])
+                for prod in response.json()['results']:
+                    prods.append(prod)
 
-            if total > limit:
+                total = int(response.json()["paging"]["total"])
+                limit = int(response.json()["paging"]["limit"])
 
-                while total > len(prods):
+                if total > limit:
 
-                    params['offset'] += limit
+                    while total > len(prods):
 
-                    response2 = requests.get(url, params=params)
+                        params['offset'] += limit
 
-                    for prod in response2.json()['results']:
-                        prods.append(prod)
+                        response2 = requests.get(url, params=params)
 
-            return prods
-        
-        else:
-            return []
-        
-    def unico(self, mlb):
-        """
-        Descrição da função
-        """
-        #Descrição da função
+                        for prod in response2.json()['results']:
+                            prods.append(prod)
 
-        asct = False #Acesso Só Com Token
+                return prods
+            
+            else:
+                return []
+            
+        def unico(self, mlb):
+            """
+            Descrição da função
+            """
+            #Descrição da função
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
-            print("Token inválido")
-            return {}
+            asct = False #Acesso Só Com Token
 
-        url = self.base_url+f"/items/{mlb}"
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
 
-        params = {
-            'access_token': self.access_token,
-        }
+            url = self.base_url+f"/items/{mlb}"
 
-        response = self.request("GET", url=url, params=params)
+            params = {
+                'access_token': self.access_token,
+            }
 
-        if response:
+            response = self.request("GET", url=url, params=params)
 
-            return response.json()
-        
-        else:
-            return {}
-        
-    def taxa_venda(self, preco, id_tipo_listagem, id_categoria):
-        """
-        Descrição da função
-        """
-        #Descrição da função
+            if response:
 
-        asct = False #Acesso Só Com Token
+                return response.json()
+            
+            else:
+                return {}
+            
+        def taxa_venda(self, preco, id_tipo_listagem, id_categoria):
+            """
+            Descrição da função
+            """
+            #Descrição da função
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
-            print("Token inválido")
-            return {}
+            asct = False #Acesso Só Com Token
 
-        url = self.base_url+f"/sites/MLB/listing_prices"
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
 
-        params = {
-            'access_token': self.access_token,
-            'price': preco,
-            'listing_type_id': id_tipo_listagem,
-            'category_id': id_categoria
-        }
+            url = self.base_url+f"/sites/MLB/listing_prices"
 
-        response = self.request("GET", url=url, params=params)
+            params = {
+                'access_token': self.access_token,
+                'price': preco,
+                'listing_type_id': id_tipo_listagem,
+                'category_id': id_categoria
+            }
 
-        if response:
+            response = self.request("GET", url=url, params=params)
 
-            return response.json()
-        
-        else:
-            return {}
-        
-    def opcoes_entrega(self, mlb, codigo_postal):
-        """
-        Descrição da função
-        """
-        #Descrição da função
+            if response:
 
-        asct = False #Acesso Só Com Token
+                return response.json()
+            
+            else:
+                return {}
+            
+        def opcoes_entrega(self, mlb, codigo_postal):
+            """
+            Descrição da função
+            """
+            #Descrição da função
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
-            print("Token inválido")
-            return {}
+            asct = False #Acesso Só Com Token
 
-        url = self.base_url+f"/items/{mlb}/shipping_options"
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
 
-        params = {
-            'access_token': self.access_token,
-            'zip_code': codigo_postal
-        }
+            url = self.base_url+f"/items/{mlb}/shipping_options"
 
-        response = self.request("GET", url=url, params=params)
+            params = {
+                'access_token': self.access_token,
+                'zip_code': codigo_postal
+            }
 
-        if response:
+            response = self.request("GET", url=url, params=params)
 
-            return response.json()
-        
-        else:
-            return {}
-        
-    def unico_extra(self, mlb):
-        """
-        Pega todas as informações do anúncio e também acrescenta a taxa de venda e o custo do frete grátis (caso seja).
+            if response:
 
-        As informações estão dentro de 'body'
-        Taxa de venda como 'sale_fee'
-        Custo de frete grátis como 'shipping_free_cost'
-        """
-        #Descrição da função
+                return response.json()
+            
+            else:
+                return {}
 
-        asct = False #Acesso Só Com Token
+        def descricao(self, mlb):
+            """
+            Descrição da função
+            """
+            #Descrição da função
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
-            print("Token inválido")
-            return {}
+            asct = True #Acesso Só Com Token
 
-        url = self.base_url+f"/items/{mlb}"
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
 
-        params = {
-            'access_token': self.access_token,
-        }
+            url = self.base_url+f"/items/{mlb}/description"
 
-        response = self.request("GET", url=url, params=params)
+            params = {
+                'access_token': self.access_token,
+            }
 
-        if response:
+            response = self.request("GET", url=url, params=params)
 
-            anuncio = response.json()
+            if response:
 
-            anuncio['sale_fee'] = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])['sale_fee_amount']
-            if anuncio['shipping']['free_shipping'] == 1:
-                opcoes = self.opcoes_entrega(mlb, '04913000')
-                if opcoes != {}:
-                    anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                return response.json()
+            
+            else:
+                return {}
+
+        def unico_extra(self, mlb):
+            """
+            Pega todas as informações do anúncio e também acrescenta a taxa de venda e o custo do frete grátis (caso seja).
+
+            As informações estão dentro de 'body'
+            Taxa de venda como 'sale_fee'
+            Custo de frete grátis como 'shipping_free_cost'
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/items/{mlb}"
+
+            params = {
+                'access_token': self.access_token,
+            }
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                anuncio = response.json()
+
+                anuncio['sale_fee'] = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])['sale_fee_amount']
+                if anuncio['shipping']['free_shipping'] == 1:
+                    opcoes = self.opcoes_entrega(mlb, '04913000')
+                    if opcoes != {}:
+                        anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                    else:
+                        anuncio['shipping_free_cost'] = 0
                 else:
                     anuncio['shipping_free_cost'] = 0
-            else:
-                anuncio['shipping_free_cost'] = 0
 
-            return anuncio
-        
-        else:
-            return {}
+                return anuncio
+            
+            else:
+                return {}
         
 class vendedor(auth):
 
