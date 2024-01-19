@@ -92,9 +92,9 @@ JSON: {response.json()}""")
             else:
                 return None
 
-class anuncio(auth):
+class anuncio:
 
-    class get:
+    class get(auth):
 
         def todos(self, seller_id):
             """
