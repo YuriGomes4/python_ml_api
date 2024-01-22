@@ -3,9 +3,10 @@ import requests
 
 class auth():
 
-    def __init__(self, access_token):
+    def __init__(self, access_token, print_error=True):
         self.access_token = access_token
         self.base_url = "https://api.mercadolibre.com"
+        self.print_error = print_error
 
     def request(self, method="GET", url="", headers=None, params=None, data=None):
 
@@ -32,7 +33,8 @@ class auth():
             if response.status_code == 200:
                 return response
             elif response.status_code != 429:
-                print(f"""Erro no retorno da API do Mercado Livre
+                if self.print_error:
+                    print(f"""Erro no retorno da API do Mercado Livre
 Mensagem: {response.json()['message']}
 URL: {url}
 Metodo: {method}
@@ -57,7 +59,6 @@ JSON: {response.json()}""")
             return None
         
         seller_id = self.access_token.split('-')[-1]
-        print(seller_id)
 
         url = self.base_url+f"/users/{seller_id}/items/search"
 
