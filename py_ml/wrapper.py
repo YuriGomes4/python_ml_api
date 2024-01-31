@@ -298,6 +298,34 @@ class anuncio:
             
             else:
                 return {}
+            
+        def promocoes(self, mlb):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or type(self.access_token) != str):
+                print("Token inválido")
+                return []
+
+            url = self.base_url+f"/seller-promotions/items/{mlb}"
+
+            params = {
+                'app_version': 'v2',
+                'access_token': self.access_token,
+            }
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return []
         
 class vendedor(auth):
 
