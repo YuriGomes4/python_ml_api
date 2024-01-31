@@ -3,7 +3,7 @@ import requests
 
 class auth():
 
-    def __init__(self, access_token, print_error=True):
+    def __init__(self, access_token="", print_error=True):
         self.access_token = access_token
         self.base_url = "https://api.mercadolibre.com"
         self.print_error = print_error
@@ -54,7 +54,7 @@ JSON: {response.json()}""")
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return None
         
@@ -105,7 +105,7 @@ class anuncio:
 
             asct = True #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return []
 
@@ -152,7 +152,7 @@ class anuncio:
 
             asct = False #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
 
@@ -160,6 +160,33 @@ class anuncio:
 
             params = {
                 'access_token': self.access_token,
+            }
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
+
+        def pesquisar(self, pesquisa):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/sites/MLB/search"
+
+            params = {
+                'q': pesquisa,
             }
 
             response = self.request("GET", url=url, params=params)
@@ -179,7 +206,7 @@ class anuncio:
 
             asct = False #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
 
@@ -209,7 +236,7 @@ class anuncio:
 
             asct = False #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
 
@@ -237,7 +264,7 @@ class anuncio:
 
             asct = True #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
 
@@ -268,7 +295,7 @@ class anuncio:
 
             asct = False #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
 
@@ -307,7 +334,7 @@ class anuncio:
 
             asct = True #Acesso Só Com Token
 
-            if asct and (self.access_token == "" or type(self.access_token) != str):
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return []
 
@@ -337,7 +364,7 @@ class vendedor(auth):
 
         asct = False #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return {}
 
@@ -369,7 +396,7 @@ class venda(auth):
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return []
 
@@ -418,7 +445,7 @@ class venda(auth):
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return {}
 
@@ -445,7 +472,7 @@ class venda(auth):
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return {}
 
@@ -472,7 +499,7 @@ class venda(auth):
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return {}
 
@@ -501,7 +528,7 @@ class venda(auth):
 
         asct = True #Acesso Só Com Token
 
-        if asct and (self.access_token == "" or type(self.access_token) != str):
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
             print("Token inválido")
             return {}
 
