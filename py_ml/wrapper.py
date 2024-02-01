@@ -93,6 +93,83 @@ JSON: {response.json()}""")
             else:
                 return None
 
+class geral:
+
+    class get(auth):
+
+        def categorias(self):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/sites/MLB/categories"
+
+            response = self.request("GET", url=url)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
+            
+        def detalhes_categoria(self, id_categoria):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/categories/{id_categoria}"
+
+            response = self.request("GET", url=url)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
+            
+        def mais_vendidos(self, id_categoria):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+            
+            params = {
+                'access_token': self.access_token
+            }
+
+            url = self.base_url+f"/highlights/MLB/category/{id_categoria}"
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
+
 class anuncio:
 
     class get(auth):
