@@ -430,6 +430,43 @@ class anuncio:
             
             else:
                 return []
+            
+        def visitas_intervalo(self, mlb, dias, intervalo, termino):
+            """
+            Descrição da função
+
+            Exemplo:
+            last: 30
+            unit: day
+            ending: 2023-12-15
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return []
+
+            url = self.base_url+f"/items/{mlb}/visits/time_window"
+
+            params = {
+                'last': dias,
+                'unit': intervalo,
+                'ending': termino,
+            }
+
+            if not(self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                params['access_token'] = self.access_token
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return []
         
 class vendedor(auth):
 
