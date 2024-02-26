@@ -388,7 +388,11 @@ class anuncio:
 
                 anuncio = response.json()
 
-                anuncio['sale_fee'] = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])['sale_fee_amount']
+                resp_taxa_venda = resp_taxa_venda
+
+                anuncio['sale_fee'] = resp_taxa_venda['sale_fee_amount']
+                anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
+                anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
                 if anuncio['shipping']['free_shipping'] == 1:
                     opcoes = self.opcoes_entrega(mlb, '04913000')
                     if opcoes != {}:
