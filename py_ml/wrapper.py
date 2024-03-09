@@ -248,7 +248,7 @@ class anuncio:
             else:
                 return {}
 
-        def pesquisar(self, pesquisa):
+        def pesquisar(self, pesquisa, offset=0):
             """
             Descrição da função
             """
@@ -264,6 +264,7 @@ class anuncio:
 
             params = {
                 'q': pesquisa,
+                'offset': offset,
             }
 
             response = self.request("GET", url=url, params=params)
