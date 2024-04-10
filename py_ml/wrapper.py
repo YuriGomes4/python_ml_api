@@ -392,7 +392,7 @@ class anuncio:
                 resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
 
                 anuncio['sale_fee'] = resp_taxa_venda['sale_fee_amount']
-                anuncio['sale_fee_tax'] = float(resp_taxa_venda['sale_fee_amount']) - float(resp_taxa_venda['sale_fee_details']['fixed_fee'])
+                anuncio['sale_fee_tax'] = round(float(resp_taxa_venda['sale_fee_amount']) - float(resp_taxa_venda['sale_fee_details']['fixed_fee']), 2)
                 anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
                 anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
                 if anuncio['shipping']['free_shipping'] == 1:
