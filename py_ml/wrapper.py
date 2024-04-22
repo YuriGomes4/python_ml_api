@@ -176,7 +176,7 @@ class anuncio:
 
         def todos(self, seller_id):
             """
-            Descrição da função
+            Ver todos os anúncios do vendedor
             """
             #Descrição da função
 
@@ -247,6 +247,34 @@ class anuncio:
             
             else:
                 return {}
+        
+        def varios(self, mlbs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/items"
+
+            params = {
+                'access_token': self.access_token,
+                'ids': ','.join(mlbs),
+            }
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return []
 
         def pesquisar(self, pesquisa, offset=0):
             """
