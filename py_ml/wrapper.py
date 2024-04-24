@@ -501,6 +501,36 @@ class anuncio:
             
             else:
                 return []
+            
+        def visitas(self, mlb):
+            """
+            Ver o total de visitas de um anúncio
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return []
+
+            url = self.base_url+f"/visits/items"
+
+            params = {
+                'ids': mlb,
+            }
+
+            if not(self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                params['access_token'] = self.access_token
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
         
 class vendedor(auth):
 
