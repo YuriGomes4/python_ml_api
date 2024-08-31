@@ -563,6 +563,33 @@ class vendedor(auth):
         
     def refresh_token(self, client_id, client_secret, refresh_token):
         return super().refresh_token(client_id, client_secret, refresh_token)
+    
+    def loja_oficial(self, seller_id, official_store_id):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = False
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/users/{seller_id}/brands/{official_store_id}"
+
+        params = {
+            'access_token': self.access_token,
+        }
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
         
 class venda(auth):
 
