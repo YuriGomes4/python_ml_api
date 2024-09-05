@@ -531,6 +531,33 @@ class anuncio:
             
             else:
                 return {}
+            
+        def catalogo(self, id_catalogo):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/products/{id_catalogo}"
+
+            params = {
+                'access_token': self.access_token,
+            }
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
         
 class vendedor(auth):
 
