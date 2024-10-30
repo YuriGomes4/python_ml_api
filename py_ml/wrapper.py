@@ -640,9 +640,18 @@ class venda(auth):
             'offset': 0
         }
 
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
         if kwargs != {}:
             for key, value in kwargs.items():
-                params[key] = value
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
         else:
             params['q'] = ''
 
