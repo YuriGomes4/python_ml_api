@@ -620,7 +620,7 @@ class vendedor(auth):
         
 class venda(auth):
 
-    def todas(self, seller_id):
+    def todas(self, seller_id, **kwargs):
         """
         Descrição da função
         """
@@ -637,9 +637,14 @@ class venda(auth):
         params = {
             'access_token': self.access_token,
             'seller': seller_id,
-            'q': "",
             'offset': 0
         }
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                params[key] = value
+        else:
+            params['q'] = ''
 
         response = self.request("GET", url=url, params=params)
 
