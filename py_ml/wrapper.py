@@ -574,6 +574,7 @@ class anuncio:
             url = self.base_url+f"/users/{seller_id}/shipping_options/free"
             
             params = {
+                'access_token': self.access_token,
                 'verbose': 'true',
             }
 
