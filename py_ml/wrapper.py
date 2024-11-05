@@ -559,6 +559,54 @@ class anuncio:
             else:
                 return {}
         
+        def custo_envio_gratis(self, seller_id, item_id=None, dimensions=None, **kwargs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+            
+            url = self.base_url+f"/users/{seller_id}/shipping_options/free"
+            
+            params = {
+                'verbose': 'true',
+            }
+
+            if item_id != None:
+                params['item_id'] = item_id
+            elif dimensions != None:
+                params['dimensions'] = dimensions
+            else:
+                print("Necessário informar item_id ou dimensions")
+                return {}
+            
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+                    
+                    return response.json()
+            
+            else:
+                return {}
+
 class vendedor(auth):
 
     def informacoes(self, seller_id):
