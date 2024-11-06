@@ -430,7 +430,7 @@ class anuncio:
 
                 anuncio = response.json()
 
-                if "supermarket_eligible" in anuncio['tags']:
+                if "supermarket_eligible" in anuncio['tags'] and anuncio['shipping']['logistic_type'] == "fulfillment":
                     resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'], tags="supermarket_eligible")
                 else:
                     resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
