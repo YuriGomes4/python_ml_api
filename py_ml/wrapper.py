@@ -304,7 +304,7 @@ class anuncio:
             else:
                 return {}
             
-        def taxa_venda(self, preco, id_tipo_listagem, id_categoria):
+        def taxa_venda(self, preco, id_tipo_listagem, id_categoria, **kwargs):
             """
             Descrição da função
             """
@@ -324,6 +324,19 @@ class anuncio:
                 'listing_type_id': id_tipo_listagem,
                 'category_id': id_categoria
             }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
 
             response = self.request("GET", url=url, params=params)
 
@@ -417,7 +430,10 @@ class anuncio:
 
                 anuncio = response.json()
 
-                resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
+                if "supermarket_eligible" in anuncio['tags']:
+                    resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'], tags="supermarket_eligible")
+                else:
+                    resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
 
                 anuncio['sale_fee'] = resp_taxa_venda['sale_fee_amount']
                 anuncio['sale_fee_tax'] = round(float(resp_taxa_venda['sale_fee_amount']) - float(resp_taxa_venda['sale_fee_details']['fixed_fee']), 2)
