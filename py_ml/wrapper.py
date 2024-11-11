@@ -120,6 +120,40 @@ class geral:
             else:
                 return {}
             
+        def preditor_categorias(self, q, limit=3):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/sites/MLB/domain_discovery/search"
+
+            params = {}
+
+            if self.access_token != "":
+                params['access_token'] = self.access_token
+
+            if q != "":
+                params['q'] = q
+            else:
+                print("Necessário informar uma pesquisa")
+                return {}
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
+            
         def detalhes_categoria(self, id_categoria):
             """
             Descrição da função
