@@ -658,6 +658,46 @@ class anuncio:
             else:
                 return {}
 
+        def metricas_ads(self, item_id, **kwargs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+            
+            url = self.base_url+f"/advertising/product_ads/items/{item_id}"
+
+            params = {
+                'access_token': self.access_token,
+            }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+                    
+                    return response.json()
+            
+            else:
+                return {}
+
 class vendedor(auth):
 
     def informacoes(self, seller_id):
