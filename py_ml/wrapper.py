@@ -689,7 +689,11 @@ class anuncio:
                         else:
                             params[key] = value
 
-            response = self.request("GET", url=url, params=params)
+            headers = {
+                'api-version': '2'
+            }
+
+            response = self.request("GET", url=url, params=params, headers=headers)
 
             if response:
                     
