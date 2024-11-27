@@ -552,7 +552,7 @@ class anuncio:
             else:
                 return []
             
-        def visitas(self, mlb):
+        def visitas(self, mlb, **kwargs):
             """
             Ver o total de visitas de um anúncio
             """
@@ -569,6 +569,19 @@ class anuncio:
             params = {
                 'ids': mlb,
             }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
 
             if not(self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 params['access_token'] = self.access_token
