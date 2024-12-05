@@ -735,7 +735,7 @@ class anuncio:
                 'access_token': self.access_token,
             }
 
-            response = self.request("GET", url=url, params=params, data=dados)
+            response = self.request("POST", url=url, params=params, data=dados)
 
             if response:
 
