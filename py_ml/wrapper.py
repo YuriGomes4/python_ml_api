@@ -1,3 +1,4 @@
+import json
 from time import sleep
 import requests
 
@@ -752,7 +753,7 @@ class anuncio:
                 'Content-Type': 'application/json'
             }
 
-            response = self.request("POST", url=url, params=params, headers=headers, data=dados)
+            response = self.request("POST", url=url, params=params, headers=headers, data=json.dumps(dados))
 
             if response:
 
