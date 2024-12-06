@@ -8,28 +8,27 @@ class auth():
         self.base_url = "https://api.mercadolibre.com"
         self.print_error = print_error
 
-    def request(self, method="GET", url="", headers=None, params=None, data=None, json=None):
+    def request(self, method="GET", url="", headers=None, params=None, data=None):
 
         req_params = params if params != None else {}
         req_headers = headers if headers != None else {}
         req_data = data if data != None else {}
-        req_json = json if json != None else {}
 
         while True:
 
             match method:
                 case "GET":
-                    response = requests.get(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.get(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "PUT":
-                    response = requests.put(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.put(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "POST":
-                    response = requests.post(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.post(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "DELETE":
-                    response = requests.delete(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.delete(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "HEAD":
-                    response = requests.head(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.head(url=url, params=req_params, headers=req_headers, data=req_data)
                 case "OPTIONS":
-                    response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
+                    response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data)
 
             if response.status_code == 200:
                 return response
