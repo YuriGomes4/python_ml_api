@@ -8,27 +8,28 @@ class auth():
         self.base_url = "https://api.mercadolibre.com"
         self.print_error = print_error
 
-    def request(self, method="GET", url="", headers=None, params=None, data=None):
+    def request(self, method="GET", url="", headers=None, params=None, data=None, json=None):
 
         req_params = params if params != None else {}
         req_headers = headers if headers != None else {}
         req_data = data if data != None else {}
+        req_json = json if json != None else {}
 
         while True:
 
             match method:
                 case "GET":
-                    response = requests.get(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.get(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
                 case "PUT":
-                    response = requests.put(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.put(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
                 case "POST":
-                    response = requests.post(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.post(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
                 case "DELETE":
-                    response = requests.delete(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.delete(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
                 case "HEAD":
-                    response = requests.head(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.head(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
                 case "OPTIONS":
-                    response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data)
+                    response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data, json=req_json)
 
             if response.status_code == 200:
                 return response
@@ -41,7 +42,8 @@ Metodo: {method}
 Parametros: {req_params}
 Headers: {req_headers}
 Data: {req_data}
-JSON: {response.json()}""")
+JSON: {req_json}
+Resposta JSON: {response.json()}""")
                 break
             else:
                 sleep(5)
