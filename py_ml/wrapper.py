@@ -750,7 +750,11 @@ class anuncio:
                         else:
                             params[key] = value
 
-            response = self.request("POST", url=url, params=params, json=dados)
+            headers = {
+                'Content-Type': 'application/json'
+            }
+
+            response = self.request("POST", url=url, params=params, headers=headers, data=dados)
 
             if response:
 
