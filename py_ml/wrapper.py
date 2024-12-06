@@ -737,7 +737,20 @@ class anuncio:
                 'access_token': self.access_token,
             }
 
-            response = self.request("POST", url=url, params=params, data=dados)
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("POST", url=url, params=params, json=dados)
 
             if response:
 
