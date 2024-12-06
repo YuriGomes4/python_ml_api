@@ -41,7 +41,6 @@ Metodo: {method}
 Parametros: {req_params}
 Headers: {req_headers}
 Data: {req_data}
-JSON: {req_json}
 Resposta JSON: {response.json()}""")
                 break
             else:
