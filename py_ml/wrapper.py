@@ -31,12 +31,12 @@ class auth():
                 case "OPTIONS":
                     response = requests.options(url=url, params=req_params, headers=req_headers, data=req_data)
 
-            if response.status_code == 200:
+            if response.status_code == 200 or response.status_code == 201:
                 return response
             elif response.status_code != 429:
                 if self.print_error:
                     print(f"""Erro no retorno da API do Mercado Livre
-Mensagem: {response.json()['message']}
+Mensagem: {response.json()['message'] if 'message' in response.json() else ""}
 URL: {url}
 Metodo: {method}
 Parametros: {req_params}
