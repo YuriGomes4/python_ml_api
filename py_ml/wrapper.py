@@ -311,7 +311,7 @@ class anuncio:
             else:
                 return []
 
-        def pesquisar(self, pesquisa, offset=0):
+        def pesquisar(self, pesquisa, offset=0, **kwargs):
             """
             Descrição da função
             """
@@ -329,6 +329,17 @@ class anuncio:
                 'q': pesquisa,
                 'offset': offset,
             }
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
 
             response = self.request("GET", url=url, params=params)
 
