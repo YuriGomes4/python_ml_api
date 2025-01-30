@@ -330,6 +330,8 @@ class anuncio:
                 'offset': offset,
             }
 
+            arg_dict = {}
+
             if 'arg_dict' in kwargs:
                 arg_dict = kwargs['arg_dict']
 
