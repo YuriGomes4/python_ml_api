@@ -15,6 +15,9 @@ class auth():
         req_headers = headers if headers != None else {}
         req_data = data if data != None else {}
 
+        if self.access_token != "" and self.access_token != None:
+            req_params['access_token'] = self.access_token
+
         while True:
 
             match method:
