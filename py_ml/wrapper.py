@@ -456,6 +456,7 @@ class anuncio:
         def unico_extra(self, mlb, **kwargs):
             """
             Pega todas as informações do anúncio e também acrescenta a taxa de venda e o custo do frete grátis (caso seja).
+            EXCLUSIVO PARA ANÚNCIOS DO VENDEDOR
 
             As informações estão dentro de 'body'
             Taxa de venda como 'sale_fee'
@@ -463,7 +464,7 @@ class anuncio:
             """
             #Descrição da função
 
-            asct = False #Acesso Só Com Token
+            asct = True #Acesso Só Com Token
 
             if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
@@ -493,6 +494,75 @@ class anuncio:
             if response:
 
                 anuncio = response.json()
+
+                if "supermarket_eligible" in anuncio['tags'] and anuncio['shipping']['logistic_type'] == "fulfillment":
+                    resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'], tags="supermarket_eligible")
+                else:
+                    resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
+
+                anuncio['sale_fee'] = resp_taxa_venda['sale_fee_amount']
+                anuncio['sale_fee_tax'] = round(float(resp_taxa_venda['sale_fee_amount']) - float(resp_taxa_venda['sale_fee_details']['fixed_fee']), 2)
+                anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
+                anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
+                if anuncio['shipping']['free_shipping'] == 1:
+                    opcoes = self.opcoes_entrega(mlb, '04913000')
+                    if opcoes != {}:
+                        anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                    else:
+                        anuncio['shipping_free_cost'] = 0
+                else:
+                    anuncio['shipping_free_cost'] = 0
+
+                return anuncio
+            
+            else:
+                return {}
+            
+        def buscar_item_extra(self, mlb, **kwargs):
+            """
+            Pega todas as informações do anúncio e também acrescenta a taxa de venda e o custo do frete grátis (caso seja).
+
+            As informações estão dentro de 'body'
+            Taxa de venda como 'sale_fee'
+            Custo de frete grátis como 'shipping_free_cost'
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/items"
+
+            if ',' in mlb:
+                print("Apenas um mlb por vez")
+                return {}
+
+            params = {
+                'access_token': self.access_token,
+                'ids': mlb,
+            }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                anuncio = response.json()[0]
 
                 if "supermarket_eligible" in anuncio['tags'] and anuncio['shipping']['logistic_type'] == "fulfillment":
                     resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'], tags="supermarket_eligible")
