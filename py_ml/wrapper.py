@@ -326,11 +326,13 @@ class anuncio:
                 print("Token inválido")
                 return {}
 
-            url = self.base_url+f"/sites/MLB/search"
+            url = self.base_url+f"/products/search"
 
             params = {
                 'q': pesquisa,
                 'offset': offset,
+                'site_id': 'MLB',
+                'status': 'active',
             }
 
             arg_dict = {}
