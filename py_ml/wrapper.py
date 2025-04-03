@@ -541,9 +541,12 @@ class anuncio:
             if ',' in mlb:
                 print("Apenas um mlb por vez")
                 return {}
+            
+            headers = {
+                'Authorization': f'Bearer {self.access_token}'
+            }
 
             params = {
-                'access_token': self.access_token,
                 'ids': mlb,
             }
 
@@ -560,7 +563,7 @@ class anuncio:
                         else:
                             params[key] = value
 
-            response = self.request("GET", url=url, params=params)
+            response = self.request("GET", url=url, params=params, headers=headers)
 
             if response:
 
