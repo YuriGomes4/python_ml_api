@@ -442,6 +442,7 @@ class anuncio:
             As informações estão dentro de 'body'
             Taxa de venda como 'sale_fee'
             Custo de frete grátis como 'shipping_free_cost'
+            ID do preço como 'price_id'
             """
             #Descrição da função
 
@@ -491,6 +492,14 @@ class anuncio:
                         anuncio['shipping_free_cost'] = 0
                 else:
                     anuncio['shipping_free_cost'] = 0
+
+                resposta_preco = self.precos(mlb)
+                if resposta_preco != {}:
+                    anuncio['price_id'] = resposta_preco['price_id']
+                    anuncio['price'] = resposta_preco['amount']
+                    anuncio['base_price'] = resposta_preco['regular_amount']
+                else:
+                    anuncio['price_id'] = None
 
                 return anuncio
             
@@ -776,6 +785,40 @@ class anuncio:
                     
                     return response.json()
             
+            else:
+                return {}
+
+        def precos(self, item_id, **kwargs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = True
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+            
+            url = self.base_url+f"/items/{item_id}/sale_price"
+
+            params = {}
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+                return response.json()
             else:
                 return {}
 
