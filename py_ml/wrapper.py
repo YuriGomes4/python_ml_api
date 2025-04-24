@@ -237,10 +237,12 @@ class anuncio:
 
                         params['offset'] += limit
 
-                        response2 = requests.get(url, params=params)
+                        response2 = self.request("GET", url=url, params=params)
 
-                        for prod in response2.json()['results']:
-                            prods.append(prod)
+                        if response2:
+
+                            for prod in response2.json()['results']:
+                                prods.append(prod)
 
                 return prods
             
