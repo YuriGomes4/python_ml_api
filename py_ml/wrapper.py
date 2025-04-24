@@ -16,7 +16,7 @@ class auth():
         req_data = data if data != None else {}
 
         if self.access_token != "" and self.access_token != None:
-            req_params['access_token'] = self.access_token
+            req_headers['Authorization'] = f'Bearer {self.access_token}'
 
         while True:
 
@@ -66,11 +66,7 @@ Resposta JSON: {response.json()}""")
 
         url = self.base_url+f"/users/{seller_id}/items/search"
 
-        params = {
-            'access_token': self.access_token,
-        }
-
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url)
 
         if response:
             return None
@@ -140,9 +136,6 @@ class geral:
 
             params = {}
 
-            if self.access_token != "":
-                params['access_token'] = self.access_token
-
             if q != "":
                 params['q'] = q
             else:
@@ -192,14 +185,10 @@ class geral:
             if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
                 return {}
-            
-            params = {
-                'access_token': self.access_token
-            }
 
             url = self.base_url+f"/highlights/MLB/category/{id_categoria}"
 
-            response = self.request("GET", url=url, params=params)
+            response = self.request("GET", url=url)
 
             if response:
 
@@ -227,7 +216,6 @@ class anuncio:
             url = self.base_url+f"/users/{seller_id}/items/search"
 
             params = {
-                'access_token': self.access_token,
                 'offset': 0
             }
 
@@ -273,11 +261,7 @@ class anuncio:
 
             url = self.base_url+f"/items/{mlb}"
 
-            params = {
-                'access_token': self.access_token,
-            }
-
-            response = self.request("GET", url=url, params=params)
+            response = self.request("GET", url=url)
 
             if response:
 
@@ -301,7 +285,6 @@ class anuncio:
             url = self.base_url+f"/items"
 
             params = {
-                'access_token': self.access_token,
                 'ids': ','.join(mlbs),
             }
 
@@ -372,7 +355,6 @@ class anuncio:
             url = self.base_url+f"/sites/MLB/listing_prices"
 
             params = {
-                'access_token': self.access_token,
                 'price': preco,
                 'listing_type_id': id_tipo_listagem,
                 'category_id': id_categoria
@@ -415,7 +397,6 @@ class anuncio:
             url = self.base_url+f"/items/{mlb}/shipping_options"
 
             params = {
-                'access_token': self.access_token,
                 'zip_code': codigo_postal
             }
 
@@ -442,11 +423,7 @@ class anuncio:
 
             url = self.base_url+f"/items/{mlb}/description"
 
-            params = {
-                'access_token': self.access_token,
-            }
-
-            response = self.request("GET", url=url, params=params)
+            response = self.request("GET", url=url)
 
             if response:
 
@@ -474,9 +451,7 @@ class anuncio:
 
             url = self.base_url+f"/items/{mlb}"
 
-            params = {
-                'access_token': self.access_token,
-            }
+            params = {}
 
             arg_dict = {}
 
@@ -542,10 +517,6 @@ class anuncio:
                 print("Apenas um mlb por vez")
                 return {}
             
-            headers = {
-                'Authorization': f'Bearer {self.access_token}'
-            }
-
             params = {
                 'ids': mlb,
             }
@@ -563,7 +534,7 @@ class anuncio:
                         else:
                             params[key] = value
 
-            response = self.request("GET", url=url, params=params, headers=headers)
+            response = self.request("GET", url=url, params=params)
 
             if response:
 
@@ -608,7 +579,6 @@ class anuncio:
 
             params = {
                 'app_version': 'v2',
-                'access_token': self.access_token,
             }
 
             response = self.request("GET", url=url, params=params)
@@ -644,9 +614,6 @@ class anuncio:
                 'unit': intervalo,
                 'ending': termino,
             }
-
-            if not(self.access_token == "" or self.access_token == None or type(self.access_token) != str):
-                params['access_token'] = self.access_token
 
             response = self.request("GET", url=url, params=params)
 
@@ -688,9 +655,6 @@ class anuncio:
                         else:
                             params[key] = value
 
-            if not(self.access_token == "" or self.access_token == None or type(self.access_token) != str):
-                params['access_token'] = self.access_token
-
             response = self.request("GET", url=url, params=params)
 
             if response:
@@ -714,11 +678,7 @@ class anuncio:
 
             url = self.base_url+f"/products/{id_catalogo}"
 
-            params = {
-                'access_token': self.access_token,
-            }
-
-            response = self.request("GET", url=url, params=params)
+            response = self.request("GET", url=url)
 
             if response:
 
@@ -742,7 +702,6 @@ class anuncio:
             url = self.base_url+f"/users/{seller_id}/shipping_options/free"
             
             params = {
-                'access_token': self.access_token,
                 'verbose': 'true',
             }
 
@@ -790,9 +749,7 @@ class anuncio:
             
             url = self.base_url+f"/advertising/product_ads/items/{item_id}"
 
-            params = {
-                'access_token': self.access_token,
-            }
+            params = {}
 
             arg_dict = {}
 
@@ -836,9 +793,7 @@ class anuncio:
 
             url = self.base_url+f"/items"
 
-            params = {
-                'access_token': self.access_token,
-            }
+            params = {}
 
             arg_dict = {}
 
@@ -882,11 +837,7 @@ class vendedor(auth):
 
         url = self.base_url+f"/users/{seller_id}"
 
-        params = {
-            'access_token': self.access_token,
-        }
-
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url)
 
         if response:
 
@@ -912,11 +863,7 @@ class vendedor(auth):
 
         url = self.base_url+f"/users/{seller_id}/brands/{official_store_id}"
 
-        params = {
-            'access_token': self.access_token,
-        }
-
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url)
 
         if response:
 
@@ -942,7 +889,6 @@ class venda(auth):
         url = self.base_url+f"/orders/search"
 
         params = {
-            'access_token': self.access_token,
             'seller': seller_id,
             'offset': 0
         }
@@ -1004,11 +950,7 @@ class venda(auth):
 
         url = self.base_url+f"/orders/{id_venda}"
 
-        params = {
-            'access_token': self.access_token,
-        }
-
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url)
 
         if response:
 
@@ -1031,11 +973,7 @@ class venda(auth):
 
         url = self.base_url+f"/orders/{id_venda}/shipments"
 
-        params = {
-            'access_token': self.access_token,
-        }
-
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url)
 
         if response:
 
@@ -1058,9 +996,7 @@ class venda(auth):
 
         url = self.base_url+f"/orders/{id_venda}/billing_info"
 
-        params = {
-            'access_token': self.access_token,
-        }
+        params = {}
 
         response = self.request("GET", url=url, params=params)
 
