@@ -866,6 +866,102 @@ class anuncio:
             else:
                 return {}
 
+    class put(auth):
+
+        def editar(self, mlb, dados={}, **kwargs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False
+            #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+            
+            url = self.base_url+f"/items/{mlb}"
+
+            params = {}
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            headers = {
+                'Content-Type': 'application/json'
+            }
+
+            response = self.request("PUT", url=url, params=params, headers=headers, data=json.dumps(dados))
+
+            if response:
+                return response.json()
+            else:
+                return {}
+            
+        def editar_preco(self, mlb, preco, **kwargs):
+            """
+            Descrição da função
+            """
+            #Descrição da função
+
+            asct = False
+            #Acesso Só Com Token
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            params = {}
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            anuncio_atual = anuncio.get(self.access_token).unico(mlb)
+
+            if anuncio_atual == {}:
+                print("Anúncio não encontrado")
+                return {}
+            
+            dados = {}
+            
+            if anuncio_atual['variations'] != []:
+                dados['variations'] = []
+                variacoes = anuncio_atual['variations']
+                for variacao in variacoes:
+                    dados['variations'].append({
+                        'id': variacao['id'],
+                        'price': preco
+                    })
+            else:
+                dados['price'] = preco
+
+            response = self.editar(mlb, dados=dados, **kwargs)
+            
+            if response:
+                return response.json()
+            else:
+                return {}
+
 class vendedor(auth):
 
     def informacoes(self, seller_id):
