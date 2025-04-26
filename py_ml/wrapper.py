@@ -267,7 +267,7 @@ class anuncio:
 
             if response:
 
-                return response.json()
+                return response
             
             else:
                 return {}
