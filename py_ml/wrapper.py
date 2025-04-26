@@ -267,7 +267,7 @@ class anuncio:
 
             if response:
 
-                return response
+                return response.json()
             
             else:
                 return {}
@@ -958,7 +958,7 @@ class anuncio:
             response = self.editar(mlb, dados=dados, **kwargs)
             
             if response:
-                return response.json()
+                return response
             else:
                 return {}
 
