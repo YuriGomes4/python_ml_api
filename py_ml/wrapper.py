@@ -348,7 +348,7 @@ class anuncio:
             """
             #Descrição da função
 
-            asct = False #Acesso Só Com Token
+            asct = True #Acesso Só Com Token
 
             if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
