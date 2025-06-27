@@ -75,6 +75,8 @@ Resposta JSON: {response.json()}""")
             return None
         else:
 
+            self.access_token = None
+
             headers = {
                 'accept': 'application/json',
                 'content-type': 'application/x-www-form-urlencoded',
