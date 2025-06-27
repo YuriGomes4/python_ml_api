@@ -1067,7 +1067,7 @@ class venda(auth):
 
                     params['offset'] += limit
 
-                    response2 = requests.get(url, params=params)
+                    response2 = self.request("GET", url=url, params=params)
 
                     for item in response2.json()['results']:
                         items.append(item)
