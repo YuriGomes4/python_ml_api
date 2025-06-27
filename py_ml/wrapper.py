@@ -46,7 +46,10 @@ Parametros: {req_params}
 Headers: {req_headers}
 Data: {req_data}
 Resposta JSON: {response.json()}""")
-                break
+                if response.status_code == 403:
+                    return None
+                else:
+                    break
             else:
                 sleep(5)
 
