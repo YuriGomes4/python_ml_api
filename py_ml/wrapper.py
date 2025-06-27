@@ -65,7 +65,7 @@ Resposta JSON: {response.json()}""")
             print("Token inválido")
             return None
         
-        seller_id = self.refresh_token.split('-')[-1]
+        seller_id = refresh_token.split('-')[-1]
 
         url = self.base_url+f"/users/{seller_id}/items/search"
 
