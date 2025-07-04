@@ -490,9 +490,15 @@ class anuncio:
                 anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
                 anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
                 if anuncio['shipping']['free_shipping'] == 1:
-                    opcoes = self.opcoes_entrega(mlb, '04913000')
-                    if opcoes != {}:
-                        anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                    custo_frete_gratis = self.custo_envio_gratis(anuncio['seller_id'], item_id=anuncio['id'])
+                    if "coverage" in custo_frete_gratis:
+                        if "all_country" in custo_frete_gratis['coverage']:
+                            if "list_cost" in custo_frete_gratis['coverage']['all_country']:
+                                anuncio['shipping_free_cost'] = custo_frete_gratis['coverage']['all_country']['list_cost']
+                            else:
+                                anuncio['shipping_free_cost'] = 0
+                        else:
+                            anuncio['shipping_free_cost'] = 0
                     else:
                         anuncio['shipping_free_cost'] = 0
                 else:
@@ -566,9 +572,15 @@ class anuncio:
                 anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
                 anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
                 if anuncio['shipping']['free_shipping'] == 1:
-                    opcoes = self.opcoes_entrega(mlb, '04913000')
-                    if opcoes != {}:
-                        anuncio['shipping_free_cost'] = opcoes['options'][0]['list_cost']
+                    custo_frete_gratis = self.custo_envio_gratis(anuncio['seller_id'], item_id=anuncio['id'])
+                    if "coverage" in custo_frete_gratis:
+                        if "all_country" in custo_frete_gratis['coverage']:
+                            if "list_cost" in custo_frete_gratis['coverage']['all_country']:
+                                anuncio['shipping_free_cost'] = custo_frete_gratis['coverage']['all_country']['list_cost']
+                            else:
+                                anuncio['shipping_free_cost'] = 0
+                        else:
+                            anuncio['shipping_free_cost'] = 0
                     else:
                         anuncio['shipping_free_cost'] = 0
                 else:
