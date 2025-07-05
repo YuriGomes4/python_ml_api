@@ -54,7 +54,7 @@ Parametros: {req_params}
 Headers: {req_headers}
 Data: {req_data}
 Resposta JSON: {json_content}""")
-                if response.status_code == 403:
+                if response.status_code == 403 or response.status_code == 404:
                     return None
                 else:
                     break
