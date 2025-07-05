@@ -38,14 +38,22 @@ class auth():
                 return response
             elif response.status_code != 429:
                 if self.print_error:
+                    try:
+                        response_json = response.json()
+                        message = response_json['message'] if 'message' in response_json else ""
+                        json_content = response_json
+                    except:
+                        message = ""
+                        json_content = response.text
+                    
                     print(f"""Erro no retorno da API do Mercado Livre
-Mensagem: {response.json()['message'] if 'message' in response.json() else ""}
+Mensagem: {message}
 URL: {url}
 Metodo: {method}
 Parametros: {req_params}
 Headers: {req_headers}
 Data: {req_data}
-Resposta JSON: {response.json()}""")
+Resposta JSON: {json_content}""")
                 if response.status_code == 403:
                     return None
                 else:
