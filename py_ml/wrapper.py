@@ -1101,6 +1101,44 @@ class venda(auth):
         
         else:
             return []
+        
+    def sla_envio(self, shipment_id, **kwargs):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return []
+
+        url = self.base_url+f"/shipments/{shipment_id}/sla"
+
+        params = {}
+
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
 
     def unica(self, id_venda):
         """
