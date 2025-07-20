@@ -249,7 +249,8 @@ class anuncio:
 
                     if response2:
                         params['scroll_id'] = response2.json()['scroll_id']
-                        params['offset'] = limit*-1
+                        params['offset'] = -100
+                        limit = 100
 
                 else:
 
@@ -262,8 +263,11 @@ class anuncio:
 
                         params['offset'] += limit
 
-                        if 'scroll_id' not in params and params['offset'] > 1000:
+                        if ('scroll_id' not in params and params['offset'] > 1000) or params['offset'] > 10000:
                             break
+
+                        if params['offset'] == 10000:
+                            params['offset'] = 9999
 
                         response2 = self.request("GET", url=url, params=params)
 
