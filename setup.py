@@ -4,7 +4,7 @@ with open("README.md", "r") as arq:
     readme = arq.read()
 
 setup(name='py_ml',
-    version='0.7.7',
+    version='0.7.8',
     license='MIT License',
     author='Yuri Gomes',
     long_description=readme,

@@ -1,13 +1,11 @@
 Metadata-Version: 2.1
 Name: py-ml
-Version: 0.7.7
+Version: 0.7.8
 Summary: Wrapper não oficial do Mercado Livre
-Home-page: UNKNOWN
 Author: Yuri Gomes
 Author-email: yurialdegomes@gmail.com
 License: MIT License
 Keywords: mercado livre
-Platform: UNKNOWN
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
@@ -126,5 +124,3 @@ Ou para criar um repositório oficial:
 ```plain
 twine upload dist/*
 ```
-
-

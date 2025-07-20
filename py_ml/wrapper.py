@@ -236,17 +236,29 @@ class anuncio:
 
             if response:
 
-                prods = []
-
-                for prod in response.json()['results']:
-                    prods.append(prod)
-
                 total = int(response.json()["paging"]["total"])
                 limit = int(response.json()["paging"]["limit"])
 
+                prods = []
+
+                if total > 1000:
+
+                    params['search_type'] = 'scan'
+
+                    response2 = self.request("GET", url=url, params=params)
+
+                    if response2:
+                        params['scroll_id'] = response2['scroll_id']
+                        params['offset'] = limit*-1
+
+                else:
+
+                    for prod in response.json()['results']:
+                        prods.append(prod)
+
                 if total > limit:
 
-                    while total > len(prods):
+                    while total > len(prods) and len(prods) < 1000:
 
                         params['offset'] += limit
 
