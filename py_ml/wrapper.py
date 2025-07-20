@@ -248,7 +248,7 @@ class anuncio:
                     response2 = self.request("GET", url=url, params=params)
 
                     if response2:
-                        params['scroll_id'] = response2['scroll_id']
+                        params['scroll_id'] = response2.json()['scroll_id']
                         params['offset'] = limit*-1
 
                 else:
