@@ -251,6 +251,7 @@ class anuncio:
                         params['scroll_id'] = response2.json()['scroll_id']
                         params['offset'] = -100
                         limit = 100
+                        params['limit'] = limit
 
                 else:
 
