@@ -258,9 +258,12 @@ class anuncio:
 
                 if total > limit:
 
-                    while total > len(prods) and len(prods) < 1000:
+                    while total > len(prods):
 
                         params['offset'] += limit
+
+                        if 'scroll_id' not in params and params['offset'] > 1000:
+                            break
 
                         response2 = self.request("GET", url=url, params=params)
 
