@@ -277,6 +277,63 @@ class anuncio:
                             for prod in response2.json()['results']:
                                 prods.append(prod)
 
+                            if 'scroll_id' in params:
+                                params['scroll_id'] = response2.json()['scroll_id']
+
+                if total > 10000:
+
+                    params['offset'] = limit*-1
+                    params['status'] = 'active'
+
+                    while total > len(prods):
+
+                        params['offset'] += limit
+
+                        if ('scroll_id' not in params and params['offset'] > 1000) or params['offset'] > 10000:
+                            break
+
+                        if params['offset'] == 10000:
+                            params['offset'] = 9999
+
+                        response2 = self.request("GET", url=url, params=params)
+
+                        if response2:
+
+                            for prod in response2.json()['results']:
+                                prods.append(prod)
+
+                            if 'scroll_id' in params:
+                                params['scroll_id'] = response2.json()['scroll_id']
+
+                        if len(response2.json()['results']) == 0:
+                            break
+
+                    params['offset'] = limit*-1
+                    params['status'] = 'paused'
+
+                    while total > len(prods):
+
+                        params['offset'] += limit
+
+                        if ('scroll_id' not in params and params['offset'] > 1000) or params['offset'] > 10000:
+                            break
+
+                        if params['offset'] == 10000:
+                            params['offset'] = 9999
+
+                        response2 = self.request("GET", url=url, params=params)
+
+                        if response2:
+
+                            for prod in response2.json()['results']:
+                                prods.append(prod)
+
+                            if 'scroll_id' in params:
+                                params['scroll_id'] = response2.json()['scroll_id']
+
+                        if len(response2.json()['results']) == 0:
+                            break
+
                 return prods
             
             else:
