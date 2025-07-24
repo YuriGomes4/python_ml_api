@@ -389,6 +389,96 @@ class anuncio:
             else:
                 return []
 
+        def varios_extra(self, mlbs, **kwargs):
+            """
+            Pega todas as informações de vários anúncios e também acrescenta a taxa de venda e o custo do frete grátis (caso seja).
+            EXCLUSIVO PARA ANÚNCIOS DO VENDEDOR
+
+            As informações estão dentro de cada item
+            Taxa de venda como 'sale_fee'
+            Custo de frete grátis como 'shipping_free_cost'
+            ID do preço como 'price_id'
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return []
+
+            url = self.base_url+f"/items"
+
+            params = {
+                'ids': ','.join(mlbs),
+            }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                anuncios_processados = []
+                
+                for item in response.json():
+                    if item['code'] == 200:
+                        anuncio = item['body']
+
+                        if "supermarket_eligible" in anuncio['tags'] and anuncio['shipping']['logistic_type'] == "fulfillment":
+                            resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'], tags="supermarket_eligible")
+                        else:
+                            resp_taxa_venda = self.taxa_venda(anuncio['price'], anuncio['listing_type_id'], anuncio['category_id'])
+
+                        anuncio['sale_fee'] = resp_taxa_venda['sale_fee_amount']
+                        anuncio['sale_fee_tax'] = round(float(resp_taxa_venda['sale_fee_amount']) - float(resp_taxa_venda['sale_fee_details']['fixed_fee']), 2)
+                        anuncio['sale_fee_percentage'] = resp_taxa_venda['sale_fee_details']['percentage_fee']
+                        anuncio['sale_fee_fixed'] = resp_taxa_venda['sale_fee_details']['fixed_fee']
+                        
+                        if anuncio['shipping']['free_shipping'] == 1:
+                            custo_frete_gratis = self.custo_envio_gratis(anuncio['seller_id'], item_id=anuncio['id'])
+                            if "coverage" in custo_frete_gratis:
+                                if "all_country" in custo_frete_gratis['coverage']:
+                                    if "list_cost" in custo_frete_gratis['coverage']['all_country']:
+                                        anuncio['shipping_free_cost'] = custo_frete_gratis['coverage']['all_country']['list_cost']
+                                    else:
+                                        anuncio['shipping_free_cost'] = 0
+                                else:
+                                    anuncio['shipping_free_cost'] = 0
+                            else:
+                                anuncio['shipping_free_cost'] = 0
+                        else:
+                            anuncio['shipping_free_cost'] = 0
+
+                        resposta_preco = self.precos(anuncio['id'])
+                        if resposta_preco != {}:
+                            anuncio['price_id'] = resposta_preco['price_id']
+                            anuncio['price'] = resposta_preco['amount']
+                            anuncio['base_price'] = resposta_preco['regular_amount']
+                        else:
+                            anuncio['price_id'] = None
+
+                        anuncios_processados.append(anuncio)
+                    else:
+                        # Mantém a estrutura original para itens que falharam
+                        anuncios_processados.append(item)
+
+                return anuncios_processados
+            
+            else:
+                return []
+
         def pesquisar(self, pesquisa, offset=0, **kwargs):
             """
             Descrição da função
