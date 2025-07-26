@@ -1,5 +1,69 @@
 # python_ml_api
- 
+
+Wrapper não oficial da API do Mercado Livre com funcionalidades completas de visitas.
+
+## Funcionalidades
+
+- ✅ Autenticação e gerenciamento de tokens
+- ✅ Gestão completa de anúncios
+- ✅ Informações de vendas e pedidos
+- ✅ **API completa de Visitas** (Nova!)
+- ✅ Consultas de usuários e vendedores
+- ✅ Categorias e produtos
+- ✅ Envios e logística
+
+## 🆕 Nova API de Visitas
+
+A partir da versão atual, o wrapper inclui suporte completo para todas as funcionalidades de visitas da API do Mercado Livre:
+
+### Funcionalidades Disponíveis:
+
+1. **Total de visitas por anúncio** - Visitas dos últimos 2 anos
+2. **Total de visitas por usuário** - Entre datas específicas
+3. **Visitas por anúncios em período** - Consulta detalhada com intervalos
+4. **Visitas por janela de tempo** - Tanto para anúncios quanto usuários
+5. **Compatibilidade com métodos legados** - Sem quebrar código existente
+
+### Exemplo Rápido:
+
+```python
+from py_ml.wrapper import visitas
+
+# Criar instância
+visits_api = visitas(access_token="seu_token")
+
+# Total de visitas de um anúncio
+total = visits_api.total_por_anuncio("MLB123456789")
+
+# Visitas dos últimos 7 dias
+tendencia = visits_api.por_anuncio_janela(
+    item_id="MLB123456789",
+    last=7,
+    unit="day"
+)
+```
+
+📖 **Documentação completa**: [VISITS_API.md](VISITS_API.md)  
+🚀 **Exemplos práticos**: [exemplo_visitas.py](exemplo_visitas.py)
+
+## Instalação
+
+```bash
+pip install py_ml
+```
+
+## Uso Básico
+
+```python
+from py_ml.wrapper import anuncio, visitas, vendedor
+
+# Autenticação
+api = anuncio.get(access_token="seu_token")
+
+# Nova API de visitas
+visits = visitas(access_token="seu_token")
+```
+
 # Material de apoio
 
 O primeiro passo é ter o código de sua biblioteca separado em uma pasta

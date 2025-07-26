@@ -793,14 +793,20 @@ class anuncio:
             else:
                 return []
             
-        def visitas_intervalo(self, mlb, dias, intervalo, termino):
+        def visitas_intervalo(self, item_id, last, unit, ending=None):
             """
-            Descrição da função
-
+            Visitantes por data por anúncio em janela de tempo
+            
+            Args:
+                item_id: ID do anúncio
+                last: Quantos períodos antes (ex: 30)
+                unit: Unidade de tempo ("day")
+                ending: Data de fim opcional (formato ISO: YYYY-MM-DD)
+            
             Exemplo:
-            last: 30
-            unit: day
-            ending: 2023-12-15
+                last: 30
+                unit: "day"
+                ending: "2023-12-15"
             """
             #Descrição da função
 
@@ -808,28 +814,31 @@ class anuncio:
 
             if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
-                return []
+                return {}
 
-            url = self.base_url+f"/items/{mlb}/visits/time_window"
+            url = self.base_url+f"/items/{item_id}/visits/time_window"
 
             params = {
-                'last': dias,
-                'unit': intervalo,
-                'ending': termino,
+                'last': last,
+                'unit': unit,
             }
+
+            if ending:
+                params['ending'] = ending
 
             response = self.request("GET", url=url, params=params)
 
             if response:
-
                 return response.json()
-            
             else:
-                return []
+                return {}
             
-        def visitas(self, mlb, **kwargs):
+        def visitas(self, item_ids, **kwargs):
             """
-            Ver o total de visitas de um anúncio
+            Ver o total de visitas de um ou vários anúncios
+            
+            Args:
+                item_ids: ID(s) do(s) anúncio(s) - pode ser string única ou lista
             """
             #Descrição da função
 
@@ -837,12 +846,18 @@ class anuncio:
 
             if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
                 print("Token inválido")
-                return []
+                return {}
 
             url = self.base_url+f"/visits/items"
 
+            # Se for uma lista, junta com vírgula, senão usa como string
+            if isinstance(item_ids, list):
+                ids_param = ','.join(item_ids)
+            else:
+                ids_param = item_ids
+
             params = {
-                'ids': mlb,
+                'ids': ids_param,
             }
 
             arg_dict = {}
@@ -866,7 +881,57 @@ class anuncio:
             
             else:
                 return {}
+        
+        def visitas_periodo(self, item_ids, date_from, date_to, **kwargs):
+            """
+            Visitas por anúncios entre intervalos de datas
             
+            Args:
+                item_ids: ID(s) do(s) anúncio(s) - pode ser string única ou lista
+                date_from: Data de início (formato ISO: YYYY-MM-DD)
+                date_to: Data de fim (formato ISO: YYYY-MM-DD)
+            """
+            
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/items/visits"
+
+            # Se for uma lista, junta com vírgula, senão usa como string
+            if isinstance(item_ids, list):
+                ids_param = ','.join(item_ids)
+            else:
+                ids_param = item_ids
+
+            params = {
+                'ids': ids_param,
+                'date_from': date_from,
+                'date_to': date_to,
+            }
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+                return response.json()
+            else:
+                return {}
+        
         def catalogo(self, id_catalogo):
             """
             Descrição da função
@@ -1240,6 +1305,96 @@ class vendedor(auth):
 
             return response.json()
         
+        else:
+            return {}
+    
+    def visitas_usuario(self, user_id, date_from, date_to, **kwargs):
+        """
+        Total de visitas por usuário entre datas
+        
+        Args:
+            user_id: ID do usuário
+            date_from: Data de início (formato ISO: YYYY-MM-DD)
+            date_to: Data de fim (formato ISO: YYYY-MM-DD)
+        """
+        
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/users/{user_id}/items_visits"
+
+        params = {
+            'date_from': date_from,
+            'date_to': date_to,
+        }
+
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+            return response.json()
+        else:
+            return {}
+    
+    def visitas_usuario_periodo(self, user_id, last, unit, ending=None, **kwargs):
+        """
+        Visitantes por data por usuário em janela de tempo
+        
+        Args:
+            user_id: ID do usuário
+            last: Quantos períodos antes (ex: 30)
+            unit: Unidade de tempo ("day")
+            ending: Data de fim opcional (formato ISO: YYYY-MM-DD)
+        """
+        
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/users/{user_id}/items_visits/time_window"
+
+        params = {
+            'last': last,
+            'unit': unit,
+        }
+
+        if ending:
+            params['ending'] = ending
+
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+            return response.json()
         else:
             return {}
         
