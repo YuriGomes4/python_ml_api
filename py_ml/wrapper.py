@@ -1116,6 +1116,44 @@ class anuncio:
             
             else:
                 return {}
+            
+        def qualidade_user_product(self, mlbu, **kwargs):
+            """
+            Pega a qualidade de publicação do user_product
+            """
+            #Descrição da função
+
+            asct = True #Acesso Só Com Token
+
+            if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+                print("Token inválido")
+                return {}
+
+            url = self.base_url+f"/user-product/{mlbu}/performance"
+
+            params = {}
+
+            arg_dict = {}
+
+            if 'arg_dict' in kwargs:
+                arg_dict = kwargs['arg_dict']
+
+            if kwargs != {}:
+                for key, value in kwargs.items():
+                    if key != 'arg_dict':
+                        if key in arg_dict:
+                            params[arg_dict[key]] = value
+                        else:
+                            params[key] = value
+
+            response = self.request("GET", url=url, params=params)
+
+            if response:
+
+                return response.json()
+            
+            else:
+                return {}
 
         def ver_estoque_full(self, inventory_id, **kwargs):
             """
