@@ -1674,3 +1674,106 @@ class venda(auth):
         
         else:
             return {}
+        
+class product_ads(auth):
+
+    def consultar_anunciante(self, **kwargs):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return []
+
+        url = self.base_url+f"/advertising/advertisers"
+
+        params = {'product_id': 'PADS'}
+
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            return response.json()
+        
+        else:
+            return {}
+
+    def metricas_dos_anuncios(self, advertiser_id, date_from, date_to, metrics, **kwargs):
+        """
+        Descrição da função
+        """
+        #Descrição da função
+
+        asct = True #Acesso Só Com Token
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return {}
+
+        url = self.base_url+f"/advertising/advertisers/{advertiser_id}/product_ads/items"
+
+        params = {
+            'date_from': date_from,
+            'date_to': date_to,
+            'metrics': metrics,
+            'limit': 100,
+            'offset': 0
+        }
+
+        arg_dict = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+
+            items = []
+
+            for item in response.json()['results']:
+                items.append(item)
+
+            total = int(response.json()["paging"]["total"])
+            limit = int(response.json()["paging"]["limit"])
+
+            if total > limit:
+
+                while total > len(items):
+
+                    params['offset'] += limit
+
+                    response2 = self.request("GET", url=url, params=params)
+
+                    for item in response2.json()['results']:
+                        items.append(item)
+
+            return items
+
+        else:
+            return []
