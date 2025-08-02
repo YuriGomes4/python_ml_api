@@ -1,1 +1,1 @@
-from .wrapper import anuncio, vendedor, venda, geral
+from .wrapper import anuncio, vendedor, venda, geral, product_ads
