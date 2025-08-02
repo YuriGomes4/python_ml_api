@@ -1737,6 +1737,10 @@ class product_ads(auth):
             'offset': 0
         }
 
+        headers = {
+            'api-version': '2'
+        }
+
         arg_dict = {}
 
         if 'arg_dict' in kwargs:
@@ -1750,7 +1754,7 @@ class product_ads(auth):
                     else:
                         params[key] = value
 
-        response = self.request("GET", url=url, params=params)
+        response = self.request("GET", url=url, params=params, headers=headers)
 
         if response:
 
@@ -1768,7 +1772,7 @@ class product_ads(auth):
 
                     params['offset'] += limit
 
-                    response2 = self.request("GET", url=url, params=params)
+                    response2 = self.request("GET", url=url, params=params, headers=headers)
 
                     for item in response2.json()['results']:
                         items.append(item)
