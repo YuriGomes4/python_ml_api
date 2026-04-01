@@ -1781,3 +1781,79 @@ class product_ads(auth):
 
         else:
             return []
+
+class notas_fiscais(auth):
+
+    def lote_mes(self, user_id, ano_mes, **kwargs):
+        """
+        Download de múltiplas notas em arquivo .zip por mês.
+        ano_mes: AAAAMM (ex: 202401)
+        """
+        asct = True
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return None
+
+        url = self.base_url+f"/users/{user_id}/invoices/sites/MLB/batch_request/period/{ano_mes}"
+
+        params = {}
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+        else:
+            arg_dict = {}
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+            return response.content
+        else:
+            return None
+
+    def lote_periodo(self, user_id, data_inicio, data_fim, **kwargs):
+        """
+        Download de múltiplas notas em arquivo .zip por período específico.
+        data_inicio: AAAAMMDD
+        data_fim: AAAAMMDD
+        """
+        asct = True
+
+        if asct and (self.access_token == "" or self.access_token == None or type(self.access_token) != str):
+            print("Token inválido")
+            return None
+
+        url = self.base_url+f"/users/{user_id}/invoices/sites/MLB/batch_request/period/stream"
+
+        params = {
+            'start': data_inicio,
+            'end': data_fim
+        }
+
+        if 'arg_dict' in kwargs:
+            arg_dict = kwargs['arg_dict']
+        else:
+            arg_dict = {}
+
+        if kwargs != {}:
+            for key, value in kwargs.items():
+                if key != 'arg_dict':
+                    if key in arg_dict:
+                        params[arg_dict[key]] = value
+                    else:
+                        params[key] = value
+
+        response = self.request("GET", url=url, params=params)
+
+        if response:
+            return response.content
+        else:
+            return None
